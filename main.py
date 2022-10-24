@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
         if os.path.isfile(image_file):
             input_image_load = cv2.imread(image_file)
-            input_hsv =input_image_load[:,:,0]
-            ellipse_find(input_image_load)
+            input_hsv =input_image_load[:,:,2]
+            ellipse_find(input_hsv)
 
 # %%
