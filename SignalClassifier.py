@@ -11,26 +11,36 @@ import numpy as np
 #   - Evaluate performance with confusion matrix
 
 
-def circle_template_match(input_image, original_image):
-    circle_template = cv2.imread('templates/edge_light.png',0)
-
+def circle_template_match(canny_image, original_image, signal_template):
     # Documentation for template matching: https://docs.opencv.org/4.x/d4/dc6/tutorial_py_template_matching.html
-    template_result = cv2.matchTemplate(input_image,circle_template,cv2.TM_CCOEFF_NORMED)
+    template_result = cv2.matchTemplate(canny_image,signal_template,cv2.TM_CCOEFF_NORMED)
     cv2.imshow("result", template_result)
+
+    print("Height template:",len(signal_template),"width:",len(signal_template[0]))
+
+    # print("Signal template shape:",signal_template.shape)
 
     locations = np.where(template_result >= 0.4)
     cv2.imshow("Template result", template_result)
 
     highlighted_templates = original_image
+    template_found = False
 
     for point in zip(*locations[::-1]):
         print("Point:",point)
-        cv2.rectangle(highlighted_templates, point, (point[0]+40,point[1]+20),(random.randint(0,255),random.randint(0,255),random.randint(0,255)),1)
+        template_found = True
+        cv2.rectangle(highlighted_templates, point, (point[0]+len(signal_template[0]),point[1]+len(signal_template)),(random.randint(0,255),random.randint(0,255),random.randint(0,255)),2)
+        break
 
     cv2.imshow("result threshold", highlighted_templates)
 
+    if template_found:
+        return True
+    else:
+        return False
 
-def ellipse_find(input_image):
+
+def ellipse_find(input_image,path_input_image):
     # Documentation: https://docs.opencv.org/3.4/de/d62/tutorial_bounding_rotated_ellipses.html
     input_image = cv2.cvtColor(input_image, cv2.COLOR_GRAY2BGR)
     cv2.imshow("Original input", input_image)
@@ -42,24 +52,29 @@ def ellipse_find(input_image):
     canny = cv2.Canny(input_hsv, 100, 250)
     cv2.imshow("Canny output",canny)
 
-    circle_template_match(canny, input_image)
-    cv2.waitKey(0)
+    for template_image in os.listdir('templates'):
+        template_location = os.path.join('templates', template_image)
+        if os.path.isfile(template_location):
+            template_file = cv2.imread(template_location,0)
+            result_template = circle_template_match(canny, input_image, template_file)
+            if result_template:
+                print("Found result",template_location)
+                print("True input:",path_input_image)
+                cv2.waitKey()
+                break
+            else:
+                print("No result:",template_location)
+    cv2.waitKey()
+
+    # cv2.waitKey(0)
 
 
 if __name__ == '__main__':
-    # test_converted = cv2.imread('images/test_image_active_lights.png',0)
-    # circle_template_match(test_converted)
-
-    # input_image_load = cv2.imread('images/GOOD_TRACK_PU_1_AND_4---4_45_1.jpg')
-    # ellipse_find(input_image_load)
-
-    # input_image_load = cv2.imread('images/GOOD_TRACK_DWARF_1_AND_4---6_12803_0.jpg')
-    # ellipse_find(input_image_load)
-
     for dataset_image in os.listdir('Resized'):
         image_file = os.path.join('Resized', dataset_image)
         print("Showing:",image_file)
 
         if os.path.isfile(image_file):
             input_image_load = cv2.imread(image_file, 0)
-            ellipse_find(input_image_load)
+            found_signal = ellipse_find(input_image_load,image_file)
+
