@@ -32,7 +32,7 @@ def circle_template_match(input_image, original_image):
 
     for point in zip(*locations[::-1]):
         print("Point:",point)
-        cv2.rectangle(highlighted_templates, point, (point[0]+20,point[1]+20),(random.randint(0,255),random.randint(0,255),random.randint(0,255)),1)
+        cv2.rectangle(highlighted_templates, point, (point[0]+40,point[1]+20),(random.randint(0,255),random.randint(0,255),random.randint(0,255)),1)
 
     cv2.imshow("result threshold", highlighted_templates)
     # cv2.waitKey(0)
