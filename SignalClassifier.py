@@ -62,3 +62,21 @@ def ellipse_find(input_image):
 
     cv2.waitKey(0)
 
+
+if __name__ == '__main__':
+    # test_converted = cv2.imread('images/test_image_active_lights.png',0)
+    # circle_template_match(test_converted)
+
+    # input_image_load = cv2.imread('images/GOOD_TRACK_PU_1_AND_4---4_45_1.jpg')
+    # ellipse_find(input_image_load)
+
+    # input_image_load = cv2.imread('images/GOOD_TRACK_DWARF_1_AND_4---6_12803_0.jpg')
+    # ellipse_find(input_image_load)
+
+    for dataset_image in os.listdir('Resized'):
+        image_file = os.path.join('Resized', dataset_image)
+        print("Showing:",image_file)
+
+        if os.path.isfile(image_file):
+            input_image_load = cv2.imread(image_file, 0)
+            ellipse_find(input_image_load)
