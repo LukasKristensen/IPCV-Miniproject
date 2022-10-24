@@ -1,3 +1,6 @@
+import os
+import glob
+import cv2
 folder = 'Resized'
 os.mkdir("HSI_images")
 i = 0
