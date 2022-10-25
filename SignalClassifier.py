@@ -66,8 +66,6 @@ def ellipse_find(input_image,path_input_image):
                 print("No result:",template_location)
     cv2.waitKey()
 
-    # cv2.waitKey(0)
-
 
 if __name__ == '__main__':
     for dataset_image in os.listdir('Resized'):
