@@ -5,7 +5,7 @@ import cv2
 
 def circle_template_match(canny_image, original_image, signal_template):
     # Documentation for template matching: https://docs.opencv.org/4.x/d4/dc6/tutorial_py_template_matching.html
-    template_result = cv2.matchTemplate(canny_image,signal_template,cv2.TM_CCOEFF_NORMED)
+    template_result = cv2.matchTemplate(canny_image,signal_template,cv2.TM_CCORR_NORMED)
     minimum_value, maximum_value, minimum_location, maximum_location = cv2.minMaxLoc(template_result)
 
     cv2.imshow("result", template_result)
@@ -69,8 +69,8 @@ def ellipse_find(input_image,path_input_image):
 
 
 if __name__ == '__main__':
-    for dataset_image in os.listdir('DATA_SET/validation_imgs'):
-        image_file = os.path.join('DATA_SET/validation_imgs', dataset_image)
+    for dataset_image in os.listdir('DATA_SET/test_imgs'):
+        image_file = os.path.join('DATA_SET/test_imgs', dataset_image)
         print("Showing:",image_file)
 
         if os.path.isfile(image_file):
